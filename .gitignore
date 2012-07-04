@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 [Bb]in/
 [Oo]bj/
 !/lib
@@ -31,11 +30,4 @@ NDependOut
 
 # mstest test results
 TestResults
-=======
-# Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
-bin
-obj
 
-# mstest test results
-TestResults
->>>>>>> 067ba5baad56318844701f78eb33867da2cda61a
