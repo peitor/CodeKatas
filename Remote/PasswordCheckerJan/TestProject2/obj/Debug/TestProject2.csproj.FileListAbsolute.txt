@@ -7,3 +7,12 @@ E:\tempprojects\TestProject2\TestProject2\obj\Debug\TestProject2.rewritten
 E:\tempprojects\TestProject2\TestProject2\obj\Debug\Decl\TestProject2.dll
 E:\tempprojects\TestProject2\TestProject2\obj\Debug\Decl\TestProject2.pdb
 E:\tempprojects\TestProject2\TestProject2\obj\Debug\CodeContractAnalysisRun.log
+D:\DataPersonal\Projects\CodeKatas\Remote\PasswordCheckerJan\TestProject2\bin\Debug\TestProject2.dll
+D:\DataPersonal\Projects\CodeKatas\Remote\PasswordCheckerJan\TestProject2\bin\Debug\TestProject2.pdb
+D:\DataPersonal\Projects\CodeKatas\Remote\PasswordCheckerJan\TestProject2\obj\Debug\TestProject2.csprojResolveAssemblyReference.cache
+D:\DataPersonal\Projects\CodeKatas\Remote\PasswordCheckerJan\TestProject2\obj\Debug\TestProject2.rewritten
+D:\DataPersonal\Projects\CodeKatas\Remote\PasswordCheckerJan\TestProject2\obj\Debug\TestProject2.dll
+D:\DataPersonal\Projects\CodeKatas\Remote\PasswordCheckerJan\TestProject2\obj\Debug\TestProject2.pdb
+D:\DataPersonal\Projects\CodeKatas\Remote\PasswordCheckerJan\TestProject2\obj\Debug\Decl\TestProject2.dll
+D:\DataPersonal\Projects\CodeKatas\Remote\PasswordCheckerJan\TestProject2\obj\Debug\Decl\TestProject2.pdb
+D:\DataPersonal\Projects\CodeKatas\Remote\PasswordCheckerJan\TestProject2\obj\Debug\CodeContractAnalysisRun.log
