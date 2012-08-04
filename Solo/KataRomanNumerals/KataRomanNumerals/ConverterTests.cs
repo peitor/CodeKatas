@@ -20,7 +20,11 @@ namespace KataRomanNumerals
 		[InlineData(10, "X")]
 		[InlineData(11, "XI")]
 		[InlineData(15, "XV")]
+		[InlineData(18, "XVIII")]
 		[InlineData(19, "XIX")]
+		[InlineData(20, "XX")]
+		[InlineData(30, "XXX")]
+		[InlineData(31, "XXXI")]
 		[InlineData(44, "XLIV")]
 		[InlineData(47, "XLVII")]
 		[InlineData(48, "XLVIII")]
@@ -29,8 +33,18 @@ namespace KataRomanNumerals
 		[InlineData(51, "LI")]
 		[InlineData(60, "LX")]
 		[InlineData(70, "LXX")]
+		[InlineData(79, "LXXIX")]
 		[InlineData(80, "LXXX")]
-    	public void ConvertData(int input, string expected)
+		[InlineData(84, "LXXXIV")]
+		[InlineData(90, "XC")]
+		[InlineData(400, "CD")]
+		[InlineData(401, "CDI")]
+		[InlineData(448, "CDXLVIII")]
+		[InlineData(500, "D")]
+		[InlineData(900, "CM")]
+		[InlineData(1999, "MCMXCIX")]
+		[InlineData(2008, "MMVIII")]
+		public void ConvertData(int input, string expected)
 		{
 			Assert.Equal(expected, converter.Convert(input));
 		}
