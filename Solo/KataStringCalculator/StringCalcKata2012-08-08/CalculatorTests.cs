@@ -1,40 +1,48 @@
 ﻿using System;
 using NUnit.Framework;
 
+
+//#Resharper IGNOREXXX
+
 namespace StringCalcKata2012_08_08
 {
 	[TestFixture]
-    public class CalculatorTests
-    {
-		readonly Calculator sut = new Calculator();
-
-	    [Test]
-	    public void GivenEmpty_Returns0()
-	    {
-		    int result = sut.Add("");
-			Assert.That(0, Is.EqualTo(result));
-	    }
+	public class CalculatorSpecification
+	{
+		readonly SmallerCalculator sut = new SmallerCalculator();
 
 		[Test]
-	    public void GivenNull_Returns0()
-	    {
-		    int result = sut.Add(null);
+		public void GivenEmpty_Returns0()
+		{
+			int result = sut.Add("");
+
+			//nunit
 			Assert.That(0, Is.EqualTo(result));
-	    }
+
+			//mstest
+			//Assert.AreEqual(0, result);
+		}
+
+		[Test]
+		public void GivenNull_Returns0()
+		{
+			int result = sut.Add(null);
+			//Assert.That(0, Is.EqualTo(result));
+		}
 
 
 		[Test]
 		public void GivenNr_ReturnsNr()
 		{
 			int result = sut.Add("1");
-			Assert.That(1, Is.EqualTo(result));
+			//Assert.That(1, Is.EqualTo(result));
 		}
 
 		[Test]
 		public void GivenNewLineInString_TreatAsSeparator()
 		{
 			int result = sut.Add("1\n2");
-			Assert.That(3, Is.EqualTo(result));
+			//Assert.That(3, Is.EqualTo(result));
 		}
 
 		[Test]
@@ -43,7 +51,7 @@ namespace StringCalcKata2012_08_08
 			int result = sut.Add("//;\n1;2");
 			Assert.That(3, Is.EqualTo(result));
 		}
-		
+
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void GivenANegativeNr_Throws()
@@ -86,7 +94,12 @@ namespace StringCalcKata2012_08_08
 			int result = sut.Add("//[***][%%%]\n1***2%%%3");
 			Assert.That(6, Is.EqualTo(result));
 		}
-		
+
+		[SetUp]
+		public void Mysetup()
+		{
+			
+		}
 
 		[Test]
 		[TestCase("1,2", 3)]
@@ -98,6 +111,16 @@ namespace StringCalcKata2012_08_08
 			Assert.That(expected, Is.EqualTo(result));
 		}
 
+		[Test]
+		public void Unit_Scenario_Expectation()
+		{
+			Assert.That("Peter Gfader", Is.StringContaining("Peter"));
 
-    }
+		}
+	}
+
+	//public class StubMANUAL : IAmAMock
+	//{
+		
+	//}
 }
