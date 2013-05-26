@@ -1,4 +1,4 @@
-﻿namespace KataTicTacToe
+﻿namespace KataTicTacToe.Extensions
 {
 	public static class PlayerExt
 	{

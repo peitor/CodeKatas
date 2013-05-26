@@ -2,6 +2,8 @@
 {
 	using System;
 
+	using KataTicTacToe.Extensions;
+
 	public class Game
 	{
 		private readonly string[,] board = new string[3, 3];
