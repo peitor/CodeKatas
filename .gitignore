@@ -26,6 +26,8 @@ NDependOut
 .svn
 *.chm
 !/photoshop
+*.ide
+*.StyleCop
 
 
 # mstest test results
