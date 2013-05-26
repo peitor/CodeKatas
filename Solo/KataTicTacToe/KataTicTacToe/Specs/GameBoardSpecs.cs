@@ -8,8 +8,12 @@
 	{
 		private Game game;
 
+		// When all your test methods start with the same name --> time to extract to a new class
+		//   eg before all methods in this class were "SetupBoard_"
+
+
 		[TestMethod]
-		public void SetupBoard_MarkerAreSetCorrectly()
+		public void MarkerAreSetCorrectly()
 		{
 			const string initialBoard = "123" +
 										"456" +
@@ -29,7 +33,7 @@
 		}
 
 		[TestMethod]
-		public void SetupBoard_Row0X_Winner()
+		public void Row0X_Winner()
 		{
 			const string initialBoard = "XXX" +
 			                            ".X." +
@@ -40,7 +44,7 @@
 		}
 
 		[TestMethod]
-		public void SetupBoard_Row0X_ButNotAPlayer_NoWinner()
+		public void Row0X_ButNotAPlayer_NoWinner()
 		{
 			const string initialBoard = "..." +
 										".X." +
@@ -51,7 +55,7 @@
 		}
 
 		[TestMethod]
-		public void SetupBoard_Row1X_Winner()
+		public void Row1X_Winner()
 		{
 			const string initialBoard = ".a." +
 										"XXX" +
@@ -62,7 +66,7 @@
 		}
 
 		[TestMethod]
-		public void SetupBoard_Row2X_Winner()
+		public void Row2X_Winner()
 		{
 			const string initialBoard = ".a." +
 										"OOX" +
@@ -74,22 +78,31 @@
 
 
 		[TestMethod]
-		public void SetupBoard_CalcWinner()
+		public void DiagonalAllX_Winner()
 		{
 			const string initialBoard = "X.." +
 			                            ".X." +
 			                            "..X";
 			this.game = new Game(initialBoard, 3);
 
-
-			Assert.Inconclusive();
-			//Assert.IsTrue(this.game.Winner.Marker == "X");
+			Assert.IsTrue(this.game.Winner == Player.P1);
 		}
 
+
 		[TestMethod]
-		public void SetupBoard_CheckBounds()
+		public void FieldIsOccupiedWithString_Breaks_LAWOFDEMETER()
 		{
 			Assert.Inconclusive();
+		}
+
+
+		[TestMethod]
+		public void CheckBounds()
+		{
+			Assert.Inconclusive();
+
+			//this.game = new Game("123", 1);
+
 		}
 	}
 }

@@ -51,9 +51,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Game.cs" />
-    <Compile Include="GameBoardSpecs.cs" />
+    <Compile Include="Specs\GameBoardSpecs.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="TicTacToeAcceptanceSpecs.cs" />
+    <Compile Include="Specs\TicTacToeAcceptanceSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Choose>
