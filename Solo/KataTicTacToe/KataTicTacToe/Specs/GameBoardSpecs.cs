@@ -1,6 +1,8 @@
 ﻿namespace KataTicTacToe
 {
 	// ReSharper disable InconsistentNaming
+	using System;
+
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 	[TestClass]
@@ -32,50 +34,84 @@
 			
 		}
 
+
 		[TestMethod]
 		public void Row0X_Winner()
 		{
 			const string initialBoard = "XXX" +
-			                            ".X." +
-			                            "..X";
+			                            "..." +
+			                            "...";
 			this.game = new Game(initialBoard, 3);
 			
-			Assert.IsTrue(this.game.Winner == Player.P1);
+			Assert.AreEqual(Player.P1, this.game.CalcWinner);
 		}
 
 		[TestMethod]
 		public void Row0X_ButNotAPlayer_NoWinner()
 		{
 			const string initialBoard = "..." +
-										".X." +
-										"..X";
+										"..." +
+										"...";
 			this.game = new Game(initialBoard, 3);
 
-			Assert.IsTrue(this.game.Winner == Player.None);
+			Assert.IsTrue(this.game.CalcWinner == Player.None);
 		}
 
 		[TestMethod]
 		public void Row1X_Winner()
 		{
-			const string initialBoard = ".a." +
+			const string initialBoard = "..." +
 										"XXX" +
-										"..X";
+										"...";
 			this.game = new Game(initialBoard, 3);
 
-			Assert.IsTrue(this.game.Winner == Player.P1);
+			Assert.AreEqual(Player.P1, this.game.CalcWinner);
 		}
 
 		[TestMethod]
 		public void Row2X_Winner()
 		{
-			const string initialBoard = ".a." +
-										"OOX" +
+			const string initialBoard = "..." +
+										"..." +
 										"XXX";
 			this.game = new Game(initialBoard, 3);
 
-			Assert.IsTrue(this.game.Winner == Player.P1);
+			Assert.AreEqual(Player.P1, this.game.CalcWinner);
 		}
 
+		[TestMethod]
+		public void Col0X_Winner()
+		{
+			const string initialBoard = "X.." +
+										"X.." +
+										"X..";
+			this.game = new Game(initialBoard, 3);
+
+			Assert.AreEqual(Player.P1, this.game.CalcWinner);
+		}
+
+		[TestMethod]
+		public void Col1X_Winner()
+		{
+			const string initialBoard = ".X." +
+										".X." +
+										".X.";
+			this.game = new Game(initialBoard, 3);
+
+			Assert.AreEqual(Player.P1, this.game.CalcWinner);
+		}
+
+
+		[TestMethod]
+		public void Col2X_Winner()
+		{
+			const string initialBoard = "..X" +
+										"..X" +
+										"..X";
+			this.game = new Game(initialBoard, 3);
+
+			Assert.AreEqual(Player.P1, this.game.CalcWinner);
+		}
 
 		[TestMethod]
 		public void DiagonalAllX_Winner()
@@ -85,8 +121,28 @@
 			                            "..X";
 			this.game = new Game(initialBoard, 3);
 
-			Assert.IsTrue(this.game.Winner == Player.P1);
+			Assert.AreEqual(Player.P1, this.game.CalcWinner);
 		}
+
+		[TestMethod]
+		public void OtherDiagonalAllX_Winner()
+		{
+			const string initialBoard = "..X" +
+										".X." +
+										"X..";
+			this.game = new Game(initialBoard, 3);
+
+			Assert.AreEqual(Player.P1, this.game.CalcWinner);
+		}
+
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentException))]
+		public void CheckBounds()
+		{
+			this.game = new Game("123", 1);
+		}
+
 
 
 		[TestMethod]
@@ -95,15 +151,14 @@
 			Assert.Inconclusive();
 		}
 
-
 		[TestMethod]
-		public void CheckBounds()
+		public void MakeBoardMoreGeneric()
 		{
 			Assert.Inconclusive();
-
-			//this.game = new Game("123", 1);
-
+			this.game = new Game("", 6);
 		}
+
+
 	}
 }
 // ReSharper restore InconsistentNaming

@@ -6,7 +6,7 @@
 	{
 		private readonly string[,] board = new string[3, 3];
 		private Player lastSetPlayer;
-
+		private readonly int boardsize;
 		public Game()
 			: this("", 3)
 		{
@@ -15,52 +15,23 @@
 
 		public Game(string initialBoard, int boardSize)
 		{
-			board = new string[boardSize, boardSize];
+			if (initialBoard.Length > boardSize * boardSize)
+			{
+				throw new ArgumentException("Initial Board is bigger than the board itself");
+			}
+
+			this.boardsize = boardSize;
+			this.board = new string[boardSize, boardSize];
 			int posi = 0;
 			foreach (char marker in initialBoard)
 			{
 				int x = posi % boardSize;
 				int y = posi / boardSize;
 
-				board[x, y] = marker.ToString();
+				this.board[x, y] = marker.ToString();
 				posi++;
 			}
 		}
-
-		public Player Winner
-		{
-			get
-			{
-				if (this.AllRowMarkersSame(0)
-					&&
-					this.board[0, 0].ToPlayer() != Player.None)
-				{
-					return this.board[0, 0].ToPlayer();
-				}
-
-				if (this.AllRowMarkersSame(1)
-					&&
-					this.board[0, 1].ToPlayer() != Player.None)
-				{
-					return this.board[0, 1].ToPlayer();
-				}
-
-				if (this.AllRowMarkersSame(2)
-					&&
-					this.board[0, 2].ToPlayer() != Player.None)
-				{
-					return this.board[0, 2].ToPlayer();
-				}
-
-
-
-				return Player.None;
-			}
-		}
-
-
-
-
 
 
 		public void Set(Player p, int x, int y)
@@ -75,9 +46,76 @@
 				throw new InvalidOperationException();
 			}
 
-			this.board[x, y] = ConvertPlayerToString(p);
+			this.board[x, y] = p.PlayerToString();
 			this.lastSetPlayer = p;
 		}
+
+
+		public Player CalcWinner
+		{
+			get
+			{
+
+				for (int i = 0; i < this.boardsize; i++)
+				{
+					if (this.AllRowMarkersSame(i)
+						&&
+						this.board[0, i].ToPlayer() != Player.None)
+					{
+						return this.board[0, i].ToPlayer();
+					}
+				}
+
+				for (int i = 0; i < this.boardsize; i++)
+				{
+					if (this.AllColumnMarkersSame(i)
+						&&
+						this.board[i, 0].ToPlayer() != Player.None)
+					{
+						return this.board[i, 0].ToPlayer();
+					}
+				}
+
+				if (this.AllDiagonalMarkersSame()
+						&&
+						this.board[0, 0].ToPlayer() != Player.None)
+				{
+					return this.board[0, 0].ToPlayer();
+				}
+
+
+				if (this.AllOtherDiagonalMarkersSame()
+						&&
+						this.board[0, 2].ToPlayer() != Player.None)
+				{
+					return this.board[0, 2].ToPlayer();
+				}
+
+
+				return Player.None;
+			}
+		}
+
+		private bool AllDiagonalMarkersSame()
+		{
+			if (this.board[0, 0] == this.board[1, 1] &&
+				this.board[1, 1] == this.board[2, 2])
+			{
+				return true;
+			}
+			return false;
+		}
+
+		private bool AllOtherDiagonalMarkersSame()
+		{
+			if (this.board[0, 2] == this.board[1, 1] &&
+				this.board[1, 1] == this.board[2, 0])
+			{
+				return true;
+			}
+			return false;
+		}
+
 
 
 		private bool AllRowMarkersSame(int row)
@@ -90,14 +128,15 @@
 			return false;
 		}
 
-		private bool AllRowMarkersSame(int row, Player player)
+		private bool AllColumnMarkersSame(int col)
 		{
-			var marker = this.ConvertPlayerToString(player);
-			if (this.board[0, row] == marker && this.board[1, row] == marker && this.board[2, row] == marker)
+			if (this.board[col, 0] == this.board[col, 1] &&
+				this.board[col, 1] == this.board[col, 2])
 			{
 				return true;
 			}
 			return false;
+
 		}
 
 		public Player FieldIsOccupiedWith(int x, int y)
@@ -105,58 +144,17 @@
 			return this.board[x, y].ToPlayer();
 		}
 
-		// TODO: THIS IS BAD: Here we are breaking Law of demeter
-		// publicly exposing the string, instead of Player
 		public string FieldIsOccupiedWithString(int x, int y)
 		{
+			// TODO: THIS IS BAD: Here we are breaking Law of demeter
+			// publicly exposing the string, instead of Player
 			return this.board[x, y];
 		}
 
-
 		public bool FieldIsOccupied(int x, int y)
 		{
-			return FieldIsOccupiedWith(x, y) != Player.None;
+			return this.FieldIsOccupiedWith(x, y) != Player.None;
 		}
 
-
-		private string ConvertPlayerToString(Player player)
-		{
-			switch (player)
-			{
-				case Player.P1:
-					return "X";
-				case Player.P2:
-					return "O";
-			}
-			return ".";
-		}
-
-		//private Player ConvertStringToPlayer(string s)
-		//{
-		//	switch (s)
-		//	{
-		//		case "X":
-		//			return Player.P1;
-		//		case "O":
-		//			return Player.P2;
-		//	}
-		//	return Player.None;
-		//}
-
-	}
-
-	public static class StringExt
-	{
-		public static Player ToPlayer(this string s)
-		{
-			switch (s)
-			{
-				case "X":
-					return Player.P1;
-				case "O":
-					return Player.P2;
-			}
-			return Player.None;
-		}
 	}
 }

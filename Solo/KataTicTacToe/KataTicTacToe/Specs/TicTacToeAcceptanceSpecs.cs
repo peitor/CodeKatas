@@ -25,7 +25,7 @@
 			game.Set(Player.P2, 1, 2);
 			game.Set(Player.P1, 2, 0);
 
-			Assert.IsTrue(game.Winner == Player.P1);
+			Assert.IsTrue(game.CalcWinner == Player.P1);
 		}
 
 		[TestMethod]
@@ -38,14 +38,14 @@
 			game.Set(Player.P1, 1, 2);
 			game.Set(Player.P2, 2, 1);
 
-			Assert.IsTrue(game.Winner == Player.P2);
+			Assert.IsTrue(game.CalcWinner == Player.P2);
 		}
 
 		[TestMethod]
-		public void NoWinnerYet()
+		public void OneMoveOnly_NoWinnerYet()
 		{
 			game.Set(Player.P1, 0, 0);
-			Assert.IsTrue(game.Winner == Player.None);
+			Assert.IsTrue(game.CalcWinner == Player.None);
 		}
 		
 
