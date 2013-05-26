@@ -17,7 +17,7 @@
 		}
 
 		[TestMethod]
-		public void Play1Game_AsStartingExample()
+		public void Example_Play1Game_AsStartingExample()
 		{
 			game.Set(Player.P1, 0, 0);
 			game.Set(Player.P2, 1, 1);
@@ -29,7 +29,7 @@
 		}
 
 		[TestMethod]
-		public void Play1Game_Player2Wins()
+		public void Example_Play1Game_Player2Wins()
 		{
 			game.Set(Player.P1, 0, 0);
 			game.Set(Player.P2, 1, 1);
@@ -60,7 +60,7 @@
 
 		[TestMethod]
 		[ExpectedException(typeof(InvalidOperationException))]
-		public void PlayerPlaysTwice()
+		public void PlayerPlaysTwice_NotAllowed()
 		{
 			game.Set(Player.P1, 1, 1);
 			game.Set(Player.P1, 1, 1);

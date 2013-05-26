@@ -1,4 +1,4 @@
-﻿namespace KataTicTacToe
+﻿namespace KataTicTacToe.Specs
 {
 	// ReSharper disable InconsistentNaming
 	using System;
