@@ -60,17 +60,15 @@
 				{
 					if (this.AllRowMarkersSame(i)
 						&&
-						this.board[0, i].ToPlayer() != Player.None)
+						this.IsFieldAPlayer(0, i))
 					{
 						return this.board[0, i].ToPlayer();
 					}
-				}
 
-				for (int i = 0; i < this.boardsize; i++)
-				{
+
 					if (this.AllColumnMarkersSame(i)
 						&&
-						this.board[i, 0].ToPlayer() != Player.None)
+						this.IsFieldAPlayer(i, 0))
 					{
 						return this.board[i, 0].ToPlayer();
 					}
@@ -78,7 +76,7 @@
 
 				if (this.AllDiagonalMarkersSame()
 						&&
-						this.board[0, 0].ToPlayer() != Player.None)
+						this.IsFieldAPlayer(0, 0))
 				{
 					return this.board[0, 0].ToPlayer();
 				}
@@ -86,7 +84,7 @@
 
 				if (this.AllOtherDiagonalMarkersSame()
 						&&
-						this.board[0, 2].ToPlayer() != Player.None)
+						this.IsFieldAPlayer(0, 2))
 				{
 					return this.board[0, 2].ToPlayer();
 				}
@@ -94,6 +92,11 @@
 
 				return Player.None;
 			}
+		}
+
+		private bool IsFieldAPlayer(int x, int y)
+		{
+			return this.board[x, y].ToPlayer() != Player.None;
 		}
 
 		private bool AllDiagonalMarkersSame()
