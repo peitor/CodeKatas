@@ -2,6 +2,7 @@
 {
 	public static class StringExt
 	{
+
 		public static Player ToPlayer(this string s)
 		{
 			switch (s)
