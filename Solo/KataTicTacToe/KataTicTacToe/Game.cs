@@ -9,6 +9,7 @@
 		private readonly string[,] board = new string[3, 3];
 		private Player lastSetPlayer;
 		private readonly int boardsize;
+		
 		public Game()
 			: this("", 3)
 		{
@@ -51,7 +52,6 @@
 			this.board[x, y] = p.PlayerToString();
 			this.lastSetPlayer = p;
 		}
-
 
 		public Player CalcWinner
 		{
@@ -96,6 +96,11 @@
 			}
 		}
 
+		private bool FieldIsOccupied(int x, int y)
+		{
+			return this.FieldIsOccupiedWith(x, y) != Player.None;
+		}
+
 		private bool IsFieldAPlayer(int x, int y)
 		{
 			return this.board[x, y].ToPlayer() != Player.None;
@@ -121,8 +126,6 @@
 			return false;
 		}
 
-
-
 		private bool AllRowMarkersSame(int row)
 		{
 			if (this.board[0, row] == this.board[1, row] &&
@@ -144,22 +147,9 @@
 
 		}
 
-		public Player FieldIsOccupiedWith(int x, int y)
+		private Player FieldIsOccupiedWith(int x, int y)
 		{
 			return this.board[x, y].ToPlayer();
 		}
-
-		public string FieldIsOccupiedWithString(int x, int y)
-		{
-			// TODO: THIS IS BAD: Here we are breaking Law of demeter
-			// publicly exposing the string, instead of Player
-			return this.board[x, y];
-		}
-
-		public bool FieldIsOccupied(int x, int y)
-		{
-			return this.FieldIsOccupiedWith(x, y) != Player.None;
-		}
-
 	}
 }

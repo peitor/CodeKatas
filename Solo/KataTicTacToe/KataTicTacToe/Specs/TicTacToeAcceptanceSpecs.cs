@@ -66,12 +66,13 @@
 			this.game.Set(Player.P1, 1, 1);
 		}
 
-		[TestMethod]
-		public void AllowSetOfMarker_WhenISet1Marker_ThenTheMarkerShouldBeSet()
-		{
-			this.game.Set(Player.P1, 1, 1);
-			this.game.FieldIsOccupied(1, 1);
-		}
+		// this shouldn't be public
+		//[TestMethod]
+		//public void AllowSetOfMarker_WhenISet1Marker_ThenTheMarkerShouldBeSet()
+		//{
+		//	this.game.Set(Player.P1, 1, 1);
+		//	this.game.FieldIsOccupied(1, 1);
+		//}
 
 	
 	}
