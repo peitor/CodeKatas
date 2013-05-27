@@ -6,10 +6,10 @@
 
 	public class Game
 	{
-		private readonly string[,] board = new string[3, 3];
+		private readonly string[,] board;
 		private Player lastSetPlayer;
 		private readonly int boardsize;
-		
+
 		public Game()
 			: this("", 3)
 		{
@@ -86,9 +86,9 @@
 
 				if (this.AllOtherDiagonalMarkersSame()
 						&&
-						this.IsFieldAPlayer(0, 2))
+						this.IsFieldAPlayer(0, boardsize - 1))
 				{
-					return this.board[0, 2].ToPlayer();
+					return this.board[0, boardsize - 1].ToPlayer();
 				}
 
 
@@ -108,43 +108,59 @@
 
 		private bool AllDiagonalMarkersSame()
 		{
-			if (this.board[0, 0] == this.board[1, 1] &&
-				this.board[1, 1] == this.board[2, 2])
+			var playerFound = this.board[0, 0];
+
+			for (int i = 0; i < boardsize; i++)
 			{
-				return true;
+				if (playerFound != this.board[i, i])
+				{
+					return false;
+				}
 			}
-			return false;
+			return true;
+
 		}
 
 		private bool AllOtherDiagonalMarkersSame()
 		{
-			if (this.board[0, 2] == this.board[1, 1] &&
-				this.board[1, 1] == this.board[2, 0])
+			var playerFound = this.board[0, boardsize - 1];
+
+			for (int i = 0; i < boardsize; i++)
 			{
-				return true;
+				if (playerFound != this.board[i, boardsize - 1 - i])
+				{
+					return false;
+				}
 			}
-			return false;
+			return true;
 		}
 
 		private bool AllRowMarkersSame(int row)
 		{
-			if (this.board[0, row] == this.board[1, row] &&
-				this.board[1, row] == this.board[2, row])
+			var playerFound = this.board[0, row];
+
+			for (int i = 0; i < boardsize; i++)
 			{
-				return true;
+				if (playerFound != this.board[i, row])
+				{
+					return false;
+				}
 			}
-			return false;
+			return true;
 		}
 
 		private bool AllColumnMarkersSame(int col)
 		{
-			if (this.board[col, 0] == this.board[col, 1] &&
-				this.board[col, 1] == this.board[col, 2])
-			{
-				return true;
-			}
-			return false;
+			var playerFound = this.board[col, 0];
 
+			for (int i = 0; i < boardsize; i++)
+			{
+				if (playerFound != this.board[col, i])
+				{
+					return false;
+				}
+			}
+			return true;
 		}
 
 		private Player FieldIsOccupiedWith(int x, int y)

@@ -134,7 +134,7 @@
 
 			Assert.AreEqual(Player.P1, this.game.CalcWinner);
 		}
-
+		
 
 		[TestMethod]
 		[ExpectedException(typeof(ArgumentException))]
@@ -145,13 +145,76 @@
 
 		
 		[TestMethod]
-		public void MakeBoardMoreGeneric()
+		public void GenericBoard_BoardWith6Columns_ColumnWinner()
 		{
-			Assert.Inconclusive();
-			this.game = new Game("", 6);
+			const string initialBoard = ".X...." +
+										".X...." +
+										".X...." +
+										".X...." +
+										".X...." +
+										".X....";
+			this.game = new Game(initialBoard, 6);
+			Assert.AreEqual(Player.P1, this.game.CalcWinner);
+		}
+
+		[TestMethod]
+		public void GenericBoard_BoardWith6Columns_RowWinner()
+		{
+			const string initialBoard = "......" +
+										"......" +
+										"......" +
+										"......" +
+										"......" +
+										"XXXXXX";
+			this.game = new Game(initialBoard, 6);
+			Assert.AreEqual(Player.P1, this.game.CalcWinner);
+		}
+
+		[TestMethod]
+		public void GenericBoard_BoardWith6Columns_NoWinner()
+		{
+			const string initialBoard = ".X...." +
+										".X...." +
+										".X...." +
+										".X...." +
+										"......" +
+										".X....";
+			this.game = new Game(initialBoard, 6);
+			Assert.AreEqual(Player.None, this.game.CalcWinner);
+		}
+
+		[TestMethod]
+		public void GenericBoard_BoardWith6Columns_DiagonaleWinner()
+		{
+			const string initialBoard = "X....." +
+										".X...." +
+										"..X..." +
+										"...X.." +
+										"....X." +
+										".....X";
+			this.game = new Game(initialBoard, 6);
+			Assert.AreEqual(Player.P1, this.game.CalcWinner);
+		}
+
+		[TestMethod]
+		public void GenericBoard_BoardWith6Columns_OtherDiagonaleWinner()
+		{
+			const string initialBoard = ".....X" +
+										"....X." +
+										"...X.." +
+										"..X..." +
+										".X...." +
+										"X.....";
+			this.game = new Game(initialBoard, 6);
+			Assert.AreEqual(Player.P1, this.game.CalcWinner);
 		}
 
 
+		[TestMethod]
+		public void RefactorTo_MoreGeneric_FieldSetup_and()
+		{
+			Assert.Inconclusive();
+		}
 	}
 }
 // ReSharper restore InconsistentNaming
