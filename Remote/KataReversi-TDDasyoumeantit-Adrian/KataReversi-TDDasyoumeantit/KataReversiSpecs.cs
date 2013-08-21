@@ -1,7 +1,7 @@
 ﻿namespace KataReversi_TDDasyoumeantit
 {
+	using System.Security.Cryptography.X509Certificates;
 	// ReSharper disable InconsistentNaming
-
 	using System;
 
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -67,11 +67,7 @@
 		[TestMethod]
 		public void GivenAStartingReversiBoard2By2_GameIsDraw__NoTokenCanBePlaced()
 		{
-			string[,] initialSetup = this.emptyBoard2By2;
-			initialSetup[0, 0] = "B";
-			initialSetup[0, 1] = "W";
-			initialSetup[1, 1] = "B";
-			initialSetup[1, 0] = "W";
+			var initialSetup = CreateInitialSetup();
 
 			currentBoard = initialSetup;
 			string winner = CalcWinner(this.currentBoard, initialSetup, drawGame);
@@ -79,6 +75,81 @@
 			Assert.AreEqual(drawGame, winner);
 		}
 
+
+		[TestMethod]
+		public void GivenAStartingReverisBoard_BlackPlacesTokenOntheBottomWhereItCanFlipWhiteToken_OneWhiteTokenIsFlipped()
+		{
+			var expectedBoard = CreateInitialSetup();
+			expectedBoard[1, 1] = "B";
+			expectedBoard[2, 1] = "B";
+			this.currentBoard = CreateInitialSetup();
+			
+			//act
+			currentBoard[2, 1] = "B";
+
+			//production code
+			currentBoard[1, 1] = "B";
+			
+			CollectionAssert.AreEqual(expectedBoard,  currentBoard);
+		}
+
+
+		[TestMethod]
+		public void GivenAStartingReverisBoard_BlackPlacesTokenOntheRightWhereItCanFlipWhiteToken_OneWhiteTokenIsFlipped()
+		{
+			var expectedBoard = CreateInitialSetup();
+			expectedBoard[1, 1] = "B";
+			expectedBoard[1, 2] = "B";
+			this.currentBoard = CreateInitialSetup();
+
+			//act
+			currentBoard[1, 2] = "B";
+
+			// flipped token
+			currentBoard[1, 1] = "B";
+		
+			CollectionAssert.AreEqual(expectedBoard, currentBoard);
+		}
+
+		[TestMethod]
+		public void GivenAStartingReverisBoard_BlackPlacesTokenOntheLeftWhereItCanFlipWhiteToken_OneWhiteTokenIsFlipped()
+		{
+			var expectedBoard = CreateInitialSetup();
+			Action<string[,], int, int, string> placeToken = delegate(string[,] strings, int x, int y, string player)
+			{
+				int boardOnTopLeftSide = -1;
+				strings[(boardOnTopLeftSide)*x, y] = player;
+			};
+
+			placeToken(expectedBoard, -1, 0, "B");
+			placeToken(expectedBoard, 0, 0, "B");
+			
+			this.currentBoard = CreateInitialSetup();
+
+			//act
+			placeToken(expectedBoard, -1, 0, "B");
+
+			// prod code
+			placeToken(currentBoard, 0, 0, "B");
+
+
+			CollectionAssert.AreEqual(expectedBoard, currentBoard);
+		}
+
+
+		// Next steps: have more "placeToken" delegates and extract them
+		// Black Places Top Flip White Token
+
+		
+		private static string[,] CreateInitialSetup()
+		{
+			string[,] initialSetup = InitializeEmptyBoardWithSize(3);
+			initialSetup[0, 0] = "W";
+			initialSetup[0, 1] = "B";
+			initialSetup[1, 1] = "W";
+			initialSetup[1, 0] = "B";
+			return initialSetup;
+		}
 
 		private static string CalcWinner(string[,] currentBoardToCheck, string[,] winningBoard, string winner)
 		{
