@@ -1,5 +1,7 @@
 ﻿namespace KataReversi_TDDasyoumeantit
 {
+	// ReSharper disable InconsistentNaming
+
 	using System;
 
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,6 +17,7 @@
 
 		private string[,] currentBoard;
 
+		private const string drawGame = "draw";
 
 		private static string[,] InitializeEmptyBoardWithSize(int boardSize)
 		{
@@ -40,27 +43,23 @@
 
 			Assert.AreEqual(expectedTokenPossibilitiesCount, tokenPlacementPossiblitiesCount);
 		}
-
-
+		
 		[TestMethod]
 		public void GivenAnEmptyReversiBoardOneByOne_WhenBlackPlacesToken_BlackWins()
 		{
 			string blackPlayer = "black";
 
 			currentBoard = this.emptyBoardOneByOne;
-			string winner = currentBoard == this.emptyBoardOneByOne ? "black" : "Game can continue";
+			string winner = CalcWinner(this.currentBoard, this.emptyBoardOneByOne, "black");
 			
 			Assert.AreEqual(blackPlayer, winner);
 		}
 
-
 		[TestMethod]
 		public void GivenAEmptyBoard2By2_GameIsDraw__NoTokenWouldBeFlipped()
 		{
-			string drawGame = "draw";
-
 			currentBoard = emptyBoard2By2;
-			string winner = currentBoard == emptyBoard2By2 ? "draw" : "Game can continue";
+			string winner =  CalcWinner(this.currentBoard, this.emptyBoard2By2, drawGame);
 			
 			Assert.AreEqual(drawGame, winner);
 		}
@@ -68,7 +67,6 @@
 		[TestMethod]
 		public void GivenAStartingReversiBoard2By2_GameIsDraw__NoTokenCanBePlaced()
 		{
-			var drawGame = "draw"; 
 			string[,] initialSetup = this.emptyBoard2By2;
 			initialSetup[0, 0] = "B";
 			initialSetup[0, 1] = "W";
@@ -76,10 +74,19 @@
 			initialSetup[1, 0] = "W";
 
 			currentBoard = initialSetup;
-			string winner = currentBoard == initialSetup ? "draw" : "Game can continue";
+			string winner = CalcWinner(this.currentBoard, initialSetup, drawGame);
 			
 			Assert.AreEqual(drawGame, winner);
 		}
+
+
+		private static string CalcWinner(string[,] currentBoardToCheck, string[,] winningBoard, string winner)
+		{
+			return currentBoardToCheck == winningBoard ? winner : "Game can continue";
+		}
+
+
+
 
 		//[TestMethod]
 		//public void WhenCanIPlaceAToken()
@@ -96,3 +103,4 @@
 		//}
 	}
 }
+// ReSharper restore InconsistentNaming
