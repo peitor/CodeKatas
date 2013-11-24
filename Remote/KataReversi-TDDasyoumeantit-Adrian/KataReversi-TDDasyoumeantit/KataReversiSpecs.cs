@@ -1,6 +1,5 @@
 ﻿namespace KataReversi_TDDasyoumeantit
 {
-	using System.Security.Cryptography.X509Certificates;
 	// ReSharper disable InconsistentNaming
 	using System;
 
@@ -43,15 +42,15 @@
 
 			Assert.AreEqual(expectedTokenPossibilitiesCount, tokenPlacementPossiblitiesCount);
 		}
-		
+
 		[TestMethod]
 		public void GivenAnEmptyReversiBoardOneByOne_WhenBlackPlacesToken_BlackWins()
 		{
 			string blackPlayer = "black";
 
 			currentBoard = this.emptyBoardOneByOne;
-			string winner = CalcWinner(this.currentBoard, this.emptyBoardOneByOne, "black");
-			
+			string winner = CalcGameOutcome(this.currentBoard, this.emptyBoardOneByOne, "black");
+
 			Assert.AreEqual(blackPlayer, winner);
 		}
 
@@ -59,8 +58,8 @@
 		public void GivenAEmptyBoard2By2_GameIsDraw__NoTokenWouldBeFlipped()
 		{
 			currentBoard = emptyBoard2By2;
-			string winner =  CalcWinner(this.currentBoard, this.emptyBoard2By2, drawGame);
-			
+			string winner = CalcGameOutcome(this.currentBoard, this.emptyBoard2By2, drawGame);
+
 			Assert.AreEqual(drawGame, winner);
 		}
 
@@ -70,90 +69,237 @@
 			var initialSetup = CreateInitialSetup();
 
 			currentBoard = initialSetup;
-			string winner = CalcWinner(this.currentBoard, initialSetup, drawGame);
-			
+			string winner = CalcGameOutcome(this.currentBoard, initialSetup, drawGame);
+
 			Assert.AreEqual(drawGame, winner);
 		}
-
-
-		[TestMethod]
-		public void GivenAStartingReverisBoard_BlackPlacesTokenOntheBottomWhereItCanFlipWhiteToken_OneWhiteTokenIsFlipped()
-		{
-			var expectedBoard = CreateInitialSetup();
-			expectedBoard[1, 1] = "B";
-			expectedBoard[2, 1] = "B";
-			this.currentBoard = CreateInitialSetup();
-			
-			//act
-			currentBoard[2, 1] = "B";
-
-			//production code
-			currentBoard[1, 1] = "B";
-			
-			CollectionAssert.AreEqual(expectedBoard,  currentBoard);
-		}
-
 
 		[TestMethod]
 		public void GivenAStartingReverisBoard_BlackPlacesTokenOntheRightWhereItCanFlipWhiteToken_OneWhiteTokenIsFlipped()
 		{
 			var expectedBoard = CreateInitialSetup();
-			expectedBoard[1, 1] = "B";
-			expectedBoard[1, 2] = "B";
+			expectedBoard[5, 5] = "B";
+			expectedBoard[5, 6] = "B";
 			this.currentBoard = CreateInitialSetup();
 
 			//act
-			currentBoard[1, 2] = "B";
+			PlaceToken(currentBoard, 5, 6, "B");
 
-			// flipped token
-			currentBoard[1, 1] = "B";
-		
 			CollectionAssert.AreEqual(expectedBoard, currentBoard);
+		}
+
+		private static void PlaceToken(string[,] strings, int x, int y, string player)
+		{
+			strings[x, y] = player;
+			// TODO: determine tokens to be flipped and do it 
+			// TODO: Flip tokens horizontally, vertically AND diagonally
+			var centerOnOrdinate = y + 0;
+			var centerOnAbsissa = x + 0;
+			int left = x - 1;
+			var bottom = y + 1;
+			int top = y - 1;
+
+			if (x == 3 && y == 4)
+			{
+				int right = x + 1;
+				FlipToken(strings, right, centerOnOrdinate, Black());
+			}
+
+			if (x == 4 && y == 3)
+			{
+				FlipToken(strings, centerOnAbsissa, bottom, Black());
+			}
+
+			if (x == 5 && y == 6)
+			{
+				FlipToken(strings, centerOnAbsissa, top, Black());
+			}
+
+			if (x == 6 && y == 5)
+			{
+				FlipToken(strings, left, centerOnOrdinate, Black());
+			}
+
+			if (x == 4 && y == 6)
+			{
+				FlipToken(strings, centerOnAbsissa, top, White());
+			}
+
+			if (x == 6 && y == 4)
+			{
+				FlipToken(strings, left, centerOnOrdinate, White());
+			}
+
+			if (x == 6 && y == 6)
+			{
+				FlipToken(strings, left, top, White());
+			}
+		}
+
+		private static string White()
+		{
+			return "W";
+		}
+
+		private static string Black()
+		{
+			return "B";
+		}
+
+		private static void FlipToken(string[,] strings, int x, int y, string token)
+		{
+			strings[x, y] = token;
 		}
 
 		[TestMethod]
 		public void GivenAStartingReverisBoard_BlackPlacesTokenOntheLeftWhereItCanFlipWhiteToken_OneWhiteTokenIsFlipped()
 		{
 			var expectedBoard = CreateInitialSetup();
-			Action<string[,], int, int, string> placeToken = delegate(string[,] strings, int x, int y, string player)
-			{
-				int boardOnTopLeftSide = -1;
-				strings[(boardOnTopLeftSide)*x, y] = player;
-			};
+			// placed
+			expectedBoard[3, 4] = "B";
+			// flipped
+			expectedBoard[4, 4] = "B";
 
-			placeToken(expectedBoard, -1, 0, "B");
-			placeToken(expectedBoard, 0, 0, "B");
-			
 			this.currentBoard = CreateInitialSetup();
 
 			//act
-			placeToken(expectedBoard, -1, 0, "B");
-
-			// prod code
-			placeToken(currentBoard, 0, 0, "B");
-
+			PlaceToken(currentBoard, 3, 4, "B");
 
 			CollectionAssert.AreEqual(expectedBoard, currentBoard);
 		}
 
+		[TestMethod]
+		public void GivenAStartingReverisBoard_BlackPlacesTokenOntheTopWhereItCanFlipWhiteToken_OneWhiteTokenIsFlipped()
+		{
+			var expectedBoard = CreateInitialSetup();
+			// placed
+			expectedBoard[4, 3] = "B";
+			// flipped
+			expectedBoard[4, 4] = "B";
 
-		// Next steps: have more "placeToken" delegates and extract them
-		// Black Places Top Flip White Token
+			this.currentBoard = CreateInitialSetup();
 
-		
+			//act
+			PlaceToken(currentBoard, 4, 3, "B");
+
+			CollectionAssert.AreEqual(expectedBoard, currentBoard);
+		}
+
+		[TestMethod]
+		public void GivenAStartingReverisBoard_BlackPlacesTokenOnTheBottomWhereItCanFlipWhiteToken_OneWhiteTokenIsFlipped()
+		{
+			var expectedBoard = CreateInitialSetup();
+			// placed
+			expectedBoard[6, 5] = "B";
+			// flipped
+			expectedBoard[5, 5] = "B";
+
+			this.currentBoard = CreateInitialSetup();
+
+			//act
+			PlaceToken(currentBoard, 6, 5, "B");
+
+			// currentBoard 5,5 IsFlipped To Black
+			Assert.AreEqual("B", currentBoard[5, 5]);
+
+			CollectionAssert.AreEqual(expectedBoard, currentBoard);
+		}
+
+		[TestMethod]
+		public void GivenAReverisBoardWith1BlackPlayedToken_WhitePlacesTokenOnTheBottomWhereItCanFlipBlackToken_OneBlackTokenIsFlipped()
+		{
+			var expectedBoard = CreateInitialSetup();
+			// played
+			expectedBoard[6, 5] = "B";
+			// flipped
+			expectedBoard[5, 5] = "B";
+			// played
+			expectedBoard[4, 6] = "W";
+			// Flipped
+			expectedBoard[4, 5] = "W";
+
+
+			this.currentBoard = CreateInitialSetup();
+			PlaceToken(currentBoard, 6, 5, "B");
+
+			// act
+			PlaceToken(currentBoard, 4, 6, "W");
+
+
+			Assert.AreEqual("W", currentBoard[4, 5]);
+			CollectionAssert.AreEqual(expectedBoard, currentBoard);
+		}
+
+
+		[TestMethod]
+		public void GivenAReverisBoardWith1BlackPlayedToken_WhitePlacesTokenOnTheRightWhereItCanFlipBlackToken_OneBlackTokenIsFlipped()
+		{
+			var expectedBoard = CreateInitialSetup();
+			// played
+			expectedBoard[6, 5] = "B";
+			// flipped
+			expectedBoard[5, 5] = "B";
+			// played
+			expectedBoard[6, 4] = "W";
+			// Flipped
+			expectedBoard[5, 4] = "W";
+
+
+			this.currentBoard = CreateInitialSetup();
+			PlaceToken(currentBoard, 6, 5, "B");
+
+			// act
+			PlaceToken(currentBoard, 6, 4, "W");
+
+
+			Assert.AreEqual("W", currentBoard[5, 4]);
+			CollectionAssert.AreEqual(expectedBoard, currentBoard);
+		}
+
+		[TestMethod]
+		public void GivenAReverisBoardWith1BlackPlayedToken_WhitePlacesTokenOnTheBottomRightWhereItCanFlipBlackToken_OneBlackTokenTopLeftIsFlipped()
+		{
+			var expectedBoard = CreateInitialSetup();
+			// played
+			expectedBoard[6, 5] = "B";
+			// flipped
+			expectedBoard[5, 5] = "B";
+			// played
+			expectedBoard[6, 6] = "W";
+			// Flipped
+			expectedBoard[5, 5] = "W";
+
+
+			this.currentBoard = CreateInitialSetup();
+			PlaceToken(currentBoard, 6, 5, "B");
+
+			// act
+			PlaceToken(currentBoard, 6, 6, "W");
+
+
+			Assert.AreEqual("W", currentBoard[5, 5]);
+			CollectionAssert.AreEqual(expectedBoard, currentBoard);
+		}
+
+		// Create an abstraction on top of these weird numbers!!! 
+		// Something we can see and understand!!
+		//    WB      
+		//    BWB  
+
+
 		private static string[,] CreateInitialSetup()
 		{
-			string[,] initialSetup = InitializeEmptyBoardWithSize(3);
-			initialSetup[0, 0] = "W";
-			initialSetup[0, 1] = "B";
-			initialSetup[1, 1] = "W";
-			initialSetup[1, 0] = "B";
+			string[,] initialSetup = InitializeEmptyBoardWithSize(8);
+			initialSetup[4, 4] = "W";
+			initialSetup[4, 5] = "B";
+			initialSetup[5, 5] = "W";
+			initialSetup[5, 4] = "B";
 			return initialSetup;
 		}
 
-		private static string CalcWinner(string[,] currentBoardToCheck, string[,] winningBoard, string winner)
+		private static string CalcGameOutcome(string[,] currentBoardToCheck, string[,] winningBoard, string gameOutcome)
 		{
-			return currentBoardToCheck == winningBoard ? winner : "Game can continue";
+			return currentBoardToCheck == winningBoard ? gameOutcome : "Game can continue";
 		}
 
 
