@@ -1,5 +1,5 @@
 ﻿namespace RedPencilCodeKata
-{
+{ // test github commit from VPN
 	public static class Promoter
 	{
 		public static void SetPromotion(Product product)
