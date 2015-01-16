@@ -54,22 +54,39 @@ module Rover =
         | South
         | West
 
+
     type position(x:int, y:int, direction:Direction) =
         member this.x = x
         member this.y = y
         member this.direction = direction
 
-    let move(direction:Direction, command:Command) =
-        match command with
-            | Forward ->
-            match direction with
-                | North -> 1
-                | South -> -1
-                | n -> 0
-            | n -> 0
+    type obstacle(x:int, y:int) =
+        member this.x = x
+        member this.y = y
 
-    let turn(direction:Direction, command:Command) =
+    let movex(direction:Direction) =
+        match direction with
+            | West -> -1
+            | East -> 1
+            | n -> 0
+    
+    let movey(direction:Direction) =
+        match direction with
+            | North -> 1 
+            | South -> -1 
+            | n -> 0
+          
+
+    let multiplicator(command:Command)  = 
         match command with
+            | Forward -> 1
+            | Backward -> -1
+            | n -> 0
+        
+        
+    let rec turn(direction:Direction, command:Command) =
+        match command with
+            | TurnRight -> turn(turn(turn(direction, Command.TurnLeft), Command.TurnLeft), Command.TurnLeft)
             | TurnLeft -> 
             match direction with
                 | North -> West
@@ -79,8 +96,24 @@ module Rover =
             | n -> direction
 
     let applyCommand(p:position, command:Command) =     
-        position(p.x + move(p.direction, command), p.y + move(p.direction, command), turn(p.direction, command))
+        position(
+                (100 + p.x + movex(p.direction) * multiplicator(command)) % 100, 
+                (100 + p.y + movey(p.direction) * multiplicator(command)) % 100, 
+                turn(p.direction, command))
 
+
+    let charToCommand(char) = 
+        match char with 
+            | "F" -> Command.Forward
+            | "R" -> Command.TurnRight
+            | n -> Command.Forward
+
+    let rec move(p:position, commands:Command list, obstacles:obstacle list) = 
+        match commands with
+            | 
+        move(applyCommand(p, commands.Head), commands.Tail, obstacles) //  List.fold (fun po co -> applyCommand(po, co)) p commands 
+    let move2(p:position, commands:string list, obstacles:obstacle list) = move(p, List.map charToCommand commands, obstacles)
+   
 
 
 // ---------------------------------------------------------------
