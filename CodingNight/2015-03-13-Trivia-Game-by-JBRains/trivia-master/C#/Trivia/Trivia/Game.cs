@@ -1,95 +1,112 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace UglyTrivia
+﻿namespace Trivia
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class Game
     {
+        private readonly bool[] inPenaltyBox = new bool[6];
 
+        private readonly int[] places = new int[6];
 
-        List<string> players = new List<string>();
+        private readonly List<string> players = new List<string>();
 
-        int[] places = new int[6];
-        int[] purses = new int[6];
+        private readonly LinkedList<string> popQuestions = new LinkedList<string>();
 
-        bool[] inPenaltyBox = new bool[6];
+        private readonly int[] purses = new int[6];
 
-        LinkedList<string> popQuestions = new LinkedList<string>();
-        LinkedList<string> scienceQuestions = new LinkedList<string>();
-        LinkedList<string> sportsQuestions = new LinkedList<string>();
-        LinkedList<string> rockQuestions = new LinkedList<string>();
+        private readonly LinkedList<string> rockQuestions = new LinkedList<string>();
 
-        int currentPlayer = 0;
-        bool isGettingOutOfPenaltyBox;
+        private readonly LinkedList<string> scienceQuestions = new LinkedList<string>();
+
+        private readonly LinkedList<string> sportsQuestions = new LinkedList<string>();
+
+        private int currentPlayer;
+
+        private bool isGettingOutOfPenaltyBox;
 
         public Game()
         {
-            for (int i = 0; i < 50; i++)
+            for (var i = 0; i < 50; i++)
             {
-                popQuestions.AddLast("Pop Question " + i);
-                scienceQuestions.AddLast(("Science Question " + i));
-                sportsQuestions.AddLast(("Sports Question " + i));
-                rockQuestions.AddLast(createRockQuestion(i));
+                this.popQuestions.AddLast("Pop Question " + i);
+                this.scienceQuestions.AddLast(("Science Question " + i));
+                this.sportsQuestions.AddLast(("Sports Question " + i));
+                this.rockQuestions.AddLast("Rock Question " + i);
             }
         }
 
-        public String createRockQuestion(int index)
+        public bool IsPlayable()
         {
-            return "Rock Question " + index;
+            return (this.HowManyPlayers() >= 2);
         }
 
-        public bool isPlayable()
+        public bool AddPlayer(String playerName)
         {
-            return (howManyPlayers() >= 2);
-        }
-
-        public bool add(String playerName)
-        {
-            players.Add(playerName);
-            places[howManyPlayers()] = 0;
-            purses[howManyPlayers()] = 0;
-            inPenaltyBox[howManyPlayers()] = false;
+            this.players.Add(playerName);
+            this.places[this.HowManyPlayers()] = 0;
+            this.purses[this.HowManyPlayers()] = 0;
+            this.inPenaltyBox[this.HowManyPlayers()] = false;
 
             Console.WriteLine(playerName + " was added");
-            Console.WriteLine("They are player number " + players.Count);
+            Console.WriteLine("They are player number " + this.players.Count);
             return true;
         }
 
-        public int howManyPlayers()
+        public void Roll(int roll)
         {
-            return players.Count;
-        }
-
-        public void roll(int roll)
-        {
-            Console.WriteLine(players[currentPlayer] + " is the current player");
+            Console.WriteLine(this.players[this.currentPlayer] + " is the current player");
             Console.WriteLine("They have rolled a " + roll);
 
-            if (inPenaltyBox[currentPlayer])
+            if (this.inPenaltyBox[this.currentPlayer])
             {
                 if (roll % 2 != 0)
                 {
-                    isGettingOutOfPenaltyBox = true;
+                    this.isGettingOutOfPenaltyBox = true;
 
-                    Console.WriteLine(players[currentPlayer] + " is getting out of the penalty box");
+                    Console.WriteLine(this.players[this.currentPlayer] + " is getting out of the penalty box");
                     this.Move(roll);
-                    this.askQuestion();
+                    this.AskQuestion();
                 }
                 else
                 {
-                    Console.WriteLine(players[currentPlayer] + " is not getting out of the penalty box");
-                    isGettingOutOfPenaltyBox = false;
+                    Console.WriteLine(this.players[this.currentPlayer] + " is not getting out of the penalty box");
+                    this.isGettingOutOfPenaltyBox = false;
                 }
-
             }
             else
             {
                 this.Move(roll);
-                this.askQuestion();
+                this.AskQuestion();
+            }
+        }
+
+        public void WrongAnswer()
+        {
+            Console.WriteLine("Question was incorrectly answered");
+            Console.WriteLine(this.players[this.currentPlayer] + " was sent to the penalty box");
+            this.inPenaltyBox[this.currentPlayer] = true;
+
+            this.NextPlayer();
+        }
+
+        public bool WasLoser()
+        {
+            if (this.inPenaltyBox[this.currentPlayer])
+            {
+                if (!this.isGettingOutOfPenaltyBox)
+                {
+                    this.NextPlayer();
+                    return true;
+                }
             }
 
+            this.AnswerWasCorrect();
+            var notWinner = this.NotWinner();
+            this.NextPlayer();
+
+            return notWinner;
         }
 
         private void Move(int roll)
@@ -101,90 +118,14 @@ namespace UglyTrivia
             }
 
             Console.WriteLine(this.players[this.currentPlayer] + "'s new location is " + this.places[this.currentPlayer]);
-            Console.WriteLine("The category is " + this.currentCategory());
-           
+            Console.WriteLine("The category is " + this.CurrentCategory());
         }
 
-        private void askQuestion()
-        {
-            LinkedList<string> currentQuestions = null;
-            if (currentCategory() == "Pop")
-            {
-                currentQuestions = popQuestions;
-            }
-            if (currentCategory() == "Science")
-            {
-                currentQuestions = scienceQuestions;
-            }
-            if (currentCategory() == "Sports")
-            {
-                currentQuestions = sportsQuestions;
-            }
-            if (currentCategory() == "Rock")
-            {
-                currentQuestions = rockQuestions;
-            }
-            Console.WriteLine(currentQuestions.First());
-            currentQuestions.RemoveFirst();
-        }
-
-
-        private String currentCategory()
-        {
-            if (places[currentPlayer] == 0) return "Pop";
-            if (places[currentPlayer] == 4) return "Pop";
-            if (places[currentPlayer] == 8) return "Pop";
-            if (places[currentPlayer] == 1) return "Science";
-            if (places[currentPlayer] == 5) return "Science";
-            if (places[currentPlayer] == 9) return "Science";
-            if (places[currentPlayer] == 2) return "Sports";
-            if (places[currentPlayer] == 6) return "Sports";
-            if (places[currentPlayer] == 10) return "Sports";
-            return "Rock";
-        }
-
-        public bool wasCorrectlyAnswered()
-        {
-            if (inPenaltyBox[currentPlayer])
-            {
-                if (isGettingOutOfPenaltyBox)
-                {
-                    return this.WasCorrectlyAnswered();
-                }
-                else
-                {
-                    this.NextPlayer();
-                    return true;
-                }
-            }
-            else
-            {
-
-                return this.WasCorrectlyAnswered();
-            }
-        }
-
-        private bool WasCorrectlyAnswered()
+        private void AnswerWasCorrect()
         {
             Console.WriteLine("Answer was correct!!!!");
             this.purses[this.currentPlayer]++;
             Console.WriteLine(this.players[this.currentPlayer] + " now has " + this.purses[this.currentPlayer] + " Gold Coins.");
-
-            bool winner = this.didPlayerWin();
-
-            this.NextPlayer();
-
-            return winner;
-        }
-
-        public bool wrongAnswer()
-        {
-            Console.WriteLine("Question was incorrectly answered");
-            Console.WriteLine(players[currentPlayer] + " was sent to the penalty box");
-            inPenaltyBox[currentPlayer] = true;
-
-            this.NextPlayer();
-            return true;
         }
 
         private void NextPlayer()
@@ -196,10 +137,64 @@ namespace UglyTrivia
             }
         }
 
-        private bool didPlayerWin()
+        private bool NotWinner()
         {
-            return !(purses[currentPlayer] == 6);
+            return this.purses[this.currentPlayer] != 6;
+        }
+
+        private int HowManyPlayers()
+        {
+            return this.players.Count;
+        }
+
+        private string CurrentCategory()
+        {
+            switch (this.places[this.currentPlayer])
+            {
+                case 0:
+                    return "Pop";
+                case 4:
+                    return "Pop";
+                case 8:
+                    return "Pop";
+                case 1:
+                    return "Science";
+                case 5:
+                    return "Science";
+                case 9:
+                    return "Science";
+                case 2:
+                    return "Sports";
+                case 6:
+                    return "Sports";
+                case 10:
+                    return "Sports";
+            }
+
+            return "Rock";
+        }
+
+        private void AskQuestion()
+        {
+            LinkedList<string> currentQuestions = null;
+            switch (this.CurrentCategory())
+            {
+                case "Pop":
+                    currentQuestions = this.popQuestions;
+                    break;
+                case "Science":
+                    currentQuestions = this.scienceQuestions;
+                    break;
+                case "Sports":
+                    currentQuestions = this.sportsQuestions;
+                    break;
+                case "Rock":
+                    currentQuestions = this.rockQuestions;
+                    break;
+            }
+
+            Console.WriteLine(currentQuestions.First());
+            currentQuestions.RemoveFirst();
         }
     }
-
 }
